@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend
+  namespace: team16
+data:
+  PORT: '8080'
+  AUTH_API_ADDRESS: http://auth-api:8081
+  TODOS_API_ADDRESS: http://todos-api:8082

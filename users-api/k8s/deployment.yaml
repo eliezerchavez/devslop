@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-api
+  namespace: team16
+  labels:
+    app: users-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users-api
+  template:
+    metadata:
+      labels:
+        app: users-api
+    spec:
+      containers:
+      - env:
+        - name: SERVER_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: users-api
+              key: SERVER_PORT
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: users-api
+              key: JWT_SECRET
+        name: users-api
+        image: 561341012850.dkr.ecr.us-east-1.amazonaws.com/team16-users-api
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8083
+      restartPolicy: Always

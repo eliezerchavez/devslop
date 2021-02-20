@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-api
+  namespace: team16
+  labels:
+    app: auth-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-api
+  template:
+    metadata:
+      labels:
+        app: auth-api
+    spec:
+      containers:
+      - env:
+        - name: AUTH_API_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: auth-api
+              key: AUTH_API_PORT
+        - name: USERS_API_ADDRESS
+          valueFrom:
+            configMapKeyRef:
+              name: auth-api
+              key: USERS_API_ADDRESS
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: auth-api
+              key: JWT_SECRET
+        name: auth-api
+        image: 561341012850.dkr.ecr.us-east-1.amazonaws.com/team16-auth-api
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8081
+      restartPolicy: Always
+
+        

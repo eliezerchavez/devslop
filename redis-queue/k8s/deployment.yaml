@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: redis-queue
+  name: redis-queue
+  namespace: team16
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-queue
+  template:
+    metadata:
+      labels:
+        app: redis-queue
+    spec:
+      containers:
+      - env:
+        - name: MASTER
+          value: "true"
+        image: redis:latest
+        imagePullPolicy: IfNotPresent
+        name: redis-queue
+        # command:
+        # - redis-server
+        # - "/redis-master/redis.conf"
+        ports:
+        - containerPort: 6379
+          protocol: TCP
+          name: redis
+        resources:
+          limits:
+            # memory: "500m"
+            cpu: "0.1"
+        volumeMounts:
+        - mountPath: /redis-master-data
+          name: data
+        # - mountPath: /redis-master
+        #   name: config
+      restartPolicy: Always
+      volumes:
+      - name: data
+        emptyDir: {}
+      # - name: config
+      #   configMap:
+      #     name: example-redis-config
+      #     items:
+      #     - key: redis-config
+      #       path: redis.conf

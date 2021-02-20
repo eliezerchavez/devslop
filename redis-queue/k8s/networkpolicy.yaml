@@ -1,0 +1,27 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: redis-queue
+  namespace: team16
+spec:
+  podSelector:
+    matchLabels:
+      role: redis-queue
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          networking/namespace: team16
+      podSelector:
+        matchLabels:
+          app: todos-api
+    ports:
+    - protocol: TCP
+      port: 6379
+  egress:
+  - to:
+    - podSelector: {}

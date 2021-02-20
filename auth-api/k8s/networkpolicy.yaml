@@ -1,0 +1,47 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: auth-api
+  namespace: team16
+spec:
+  podSelector:
+    matchLabels:
+      role: auth-api
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          networking/namespace: team16
+      podSelector:
+        matchLabels:
+          app: frontend
+    ports:
+    - protocol: TCP
+      port: 8081
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          networking/namespace: kube-system
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    ports:
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          networking/namespace: team16
+      podSelector:
+        matchLabels:
+          app: users-api
+    ports:
+    - protocol: TCP
+      port: 8083

@@ -1,0 +1,19 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: frontend
+  namespace: team16
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    controller: nginx.org/ingress-controller
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: frontend.team16.k8s-ctf.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: frontend
+          servicePort: 8080

@@ -1,0 +1,27 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: users-api
+  namespace: team16
+spec:
+  podSelector:
+    matchLabels:
+      role: users-api
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          networking/namespace: team16
+      podSelector:
+        matchLabels:
+          app: auth-api
+    ports:
+    - protocol: TCP
+      port: 8083
+  egress:
+  - to:
+    - podSelector: {}
